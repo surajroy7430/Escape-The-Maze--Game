@@ -8,7 +8,7 @@ import {
 
 const NavigationButtons = ({ onMove, disabled }) => {
   const buttonClass =
-    "w-12 h-12 md:w-20 md:h-20 text-2xl md:text-3xl font-bold transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg";
+    "w-16 h-16 md:w-20 md:h-20 text-2xl md:text-3xl font-bold transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg";
 
   return (
     <div className="flex flex-col items-center gap-3 mt-4">

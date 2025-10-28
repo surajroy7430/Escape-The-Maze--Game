@@ -77,11 +77,11 @@ export const calculateScore = (
   coinValue,
   gemValue
 ) => {
-  const baseScore = 1000 + level * 200;
-  const timePenalty = Math.min(timeInSeconds * 2, 900);
-  const timeScore = Math.max(baseScore - timePenalty, 100);
+  const baseScore = 200 + level * 50;
+  const timeMultiplier = Math.max(1 - timeInSeconds / 100, 0.3);
   const rewardScore = coinsCollected * coinValue + gemsCollected * gemValue;
-  return timeScore + rewardScore;
+  const finalScore = Math.round(baseScore * timeMultiplier + rewardScore);
+  return finalScore;
 };
 
 export const isValidMove = (maze, position) => {
