@@ -10,7 +10,11 @@ import {
 import GameStats from "../components/GameStats.jsx";
 import NavigationButtons from "../components/NavigationButtons.jsx";
 import GameControls from "../components/GameControls.jsx";
-import { createGameState, createPosition, CELL_TYPES } from "../constants/game.js";
+import {
+  createGameState,
+  createPosition,
+  CELL_TYPES,
+} from "../constants/game.js";
 import {
   LEVELS,
   findStartPosition,
@@ -229,8 +233,16 @@ const MazeGame = () => {
     }));
     setShowDialog(false);
 
-    startGame()
+    startGame();
   }, [gameState.currentLevel, startGame]);
+
+  const handleNextLevel = () => {
+    setShowDialog(false);
+
+    setTimeout(() => {
+      nextLevel();
+    }, 300);
+  };
 
   const handleMove = useCallback(
     (direction) => {
@@ -450,7 +462,7 @@ const MazeGame = () => {
                 (snakePos) => snakePos.x === x && snakePos.y === y
               );
               const cellSize =
-                "w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8";
+                "w-4 h-4 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8";
 
               let cellClass =
                 cellSize +
@@ -564,7 +576,7 @@ const MazeGame = () => {
           onResume={resumeGame}
           onStop={stopGame}
           onReset={resetGame}
-          onNextLevel={nextLevel}
+          onNextLevel={handleNextLevel}
           currentLevel={gameState.currentLevel}
         />
 
@@ -669,7 +681,7 @@ const MazeGame = () => {
               <div className="flex gap-3 justify-center">
                 {gameState.isGameWon ? (
                   <Button
-                    onClick={nextLevel}
+                    onClick={handleNextLevel}
                     className="bg-linear-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 shadow-lg px-6 py-2"
                   >
                     {gameState.currentLevel >= 5
