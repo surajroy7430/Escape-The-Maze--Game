@@ -39,8 +39,20 @@ const MazeGame = () => {
   const [gameStats, setGameStats] = useState(() => getGameStats());
   const [showDialog, setShowDialog] = useState(false);
   const [snakePositions, setSnakePositions] = useState([]);
+  const [mazeScale, setMazeScale] = useState(1);
 
   const currentLevelConfig = LEVELS[gameState.currentLevel - 1];
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 400) setMazeScale(0.75);
+      else if (window.innerWidth < 500) setMazeScale(0.85);
+      else setMazeScale(1);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Initialize snake positions when level changes
   useEffect(() => {
@@ -437,17 +449,20 @@ const MazeGame = () => {
     return (
       <div
         className={cn(
-          "inline-block p-2 sm:p-4 bg-linear-to-br from-gray-900 via-gray-800 to-gray-950 rounded-2xl shadow-2xl relative",
-          gameState.isGamePaused && "border-3 border-amber-400"
+          "inline-block relative",
+          gameState.isGamePaused && "border-3 rounded-2xl border-amber-400"
         )}
       >
         {/* Maze Grid */}
         <div
           className="grid gap-0 border-2 sm:border-4 border-amber-300 rounded-lg overflow-hidden shadow-inner bg-gray-900"
           style={{
-            gridTemplateColumns: `repeat(${maze[0].length}, minmax(0, 1fr))`,
-            maxWidth: "90vw",
+            gridTemplateColumns: `repeat(${maze[0].length}, 1fr)`,
             aspectRatio: `${maze[0].length} / ${maze.length}`,
+            width: "100%",
+            maxWidth: "100%",
+            transform: `scale(${mazeScale})`,
+            transformOrigin: "center",
           }}
         >
           {maze.map((row, y) =>
@@ -462,7 +477,7 @@ const MazeGame = () => {
                 (snakePos) => snakePos.x === x && snakePos.y === y
               );
               const cellSize =
-                "w-4 h-4 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8";
+                "w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8";
 
               let cellClass =
                 cellSize +
@@ -526,7 +541,7 @@ const MazeGame = () => {
 
         {gameState.isGamePaused && (
           <div className="absolute inset-0 bg-black/30 flex items-center justify-center rounded-2xl backdrop-blur-sm z-20">
-            <div className="text-white text-4xl font-bold animate-pulse bg-gray-900 px-8 py-4 rounded-xl border-3 border-amber-400 shadow-2xl">
+            <div className="text-white text-3xl sm:text-4xl font-bold animate-pulse bg-gray-900 px-8 py-4 rounded-xl border-3 border-amber-400 shadow-2xl">
               ⏸️ PAUSED
             </div>
           </div>
